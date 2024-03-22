@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 
 # Load the Linear Regression Model with joblib
-lr_model = joblib.load('models/linear_reg_model.pkl')
+lr_model = joblib.load('models/linear_regression_model.pkl')
 
 # Load the dataset
 dataset_path = 'Dynamic_2017.csv'
