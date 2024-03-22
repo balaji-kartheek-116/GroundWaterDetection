@@ -47,22 +47,7 @@ def main():
         st.error("Invalid Username or Password")
 
 
-     # Visualization 1: Barplot of Ground Water Recharge and Extraction by State
-    st.subheader("Visualization 1: Ground Water Recharge and Extraction by State")
-    f, ax = plt.subplots(figsize=(10, 9))
-    sns.set_color_codes("muted")
-    sns.barplot(x='GW_Recharge', y='State', data=df, label='Available Ground Water', color='b')
-    sns.barplot(x='GW_Extraction', y='State', data=df, label='GroundWater Extraction', color='r')
-    ax.legend(ncol=2, loc="lower right", frameon=True)
-    st.pyplot(f)
-    
-    # Visualization 2: Barplot of Future Ground Water Availability by State
-    st.subheader("Visualization 2: Future Ground Water Availability by State")
-    dfnew = df.copy()
-    dfnew.sort_values('Future_GW_Available', inplace=True)
-    f, ax = plt.subplots(figsize=(10, 9))
-    sns.barplot(x='Future_GW_Available', y='State', data=dfnew)
-    st.pyplot(f)
+     
     
     # Add user input fields
     st.subheader("Enter Feature Values:")
