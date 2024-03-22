@@ -4,9 +4,6 @@ import joblib
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 
-# Load the models
-#models_directory = 'models/'
-
 # Load the Linear Regression Model with joblib
 lr_model = joblib.load('models/linear_reg_model.pkl')
 
@@ -74,9 +71,6 @@ def main():
                                                              min_value=min_values['Total Current Annual Ground Water Extraction'],
                                                              max_value=max_values['Total Current Annual Ground Water Extraction'],
                                                              step=0.1)
-
-    # Print columns for debugging
-    print("Columns in min_values and max_values:", df_scaled.columns)
 
     annual_gw_allocation_domestic_2025 = st.slider("Annual GW Allocation for Domestic Use as on 2025",
                                                    min_value=min_values['Annual GW Allocation for Domestic Use as on 2025'],
