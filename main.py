@@ -3,11 +3,9 @@ import pandas as pd
 import joblib
 from sklearn.preprocessing import StandardScaler
 import numpy as np
-import pickle
 
-# Load the Linear Regression Model with pickle
-with open('models/linear_reg_model.pkl', 'rb') as f:
-    lr_model = pickle.load(f)
+# Load the Linear Regression Model with joblib
+lr_model = joblib.load('models/linear_reg_model.joblib')
 
 # Load the dataset
 dataset_path = 'Dynamic_2017.csv'
