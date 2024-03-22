@@ -1,52 +1,47 @@
 import streamlit as st
-import pandas as pd
-import joblib
-from sklearn.preprocessing import StandardScaler
 import numpy as np
+import joblib
 
-# Load the Linear Regression Model with joblib
+# Load the trained Linear Regression model
 lr_model = joblib.load('models/linear_regression_model.pkl')
-
-# Load the dataset
-dataset_path = 'Dynamic_2017.csv'
-df = pd.read_csv(dataset_path)
-
-# Drop unnecessary columns
-df.drop(['S.no.', 'Name of State', 'Name of District'], axis=1, inplace=True)
-
-# Handle missing values
-df.fillna(0, inplace=True)
-
-scaler = StandardScaler()
-df_scaled = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
-df_scaled.drop("Net Ground Water Availability for future use", axis=1, inplace=True)
-
-# Extract min and max values from the dataset
-min_values = df_scaled.min()
-max_values = df_scaled.max()
 
 def main():
     st.title("Ground Water Detection: Predicting Ground Water Availability")
 
-    # Display the loaded dataset
-    st.subheader("Loaded Dataset:")
-    st.write(df_scaled)
-
     # Get user input for features
     st.subheader("Enter Feature Values:")
-    input_features = {}
-    for column in df_scaled.columns:
-        input_features[column] = st.slider(f"{column}",
-                                           min_value=min_values[column],
-                                           max_value=max_values[column],
-                                           step=0.1)
+    recharge_rainfall_monsoon = st.slider("Recharge from rainfall During Monsoon Season", -10.0, 10.0, step=0.1)
+    recharge_other_sources_monsoon = st.slider("Recharge from other sources During Monsoon Season", -10.0, 10.0, step=0.1)
+    recharge_rainfall_non_monsoon = st.slider("Recharge from rainfall During Non Monsoon Season", -10.0, 10.0, step=0.1)
+    recharge_other_sources_non_monsoon = st.slider("Recharge from other sources During Non Monsoon Season", -10.0, 10.0, step=0.1)
+    total_annual_ground_water_recharge = st.slider("Total Annual Ground Water Recharge", -10.0, 10.0, step=0.1)
+    total_natural_discharges = st.slider("Total Natural Discharges", -10.0, 10.0, step=0.1)
+    annual_extractable_ground_water_resource = st.slider("Annual Extractable Ground Water Resource", -10.0, 10.0, step=0.1)
+    current_annual_ground_water_extraction_irrigation = st.slider("Current Annual Ground Water Extraction For Irrigation", -10.0, 10.0, step=0.1)
+    current_annual_ground_water_extraction_domestic_industrial = st.slider("Current Annual Ground Water Extraction For Domestic & Industrial Use", -10.0, 10.0, step=0.1)
+    total_current_annual_ground_water_extraction = st.slider("Total Current Annual Ground Water Extraction", -10.0, 10.0, step=0.1)
+    annual_gw_allocation_domestic_2025 = st.slider("Annual GW Allocation for Domestic Use as on 2025", -10.0, 10.0, step=0.1)
+    stage_of_ground_water_extraction = st.slider("Stage of Ground Water Extraction (%)", -10.0, 10.0, step=0.1)
 
     # Predict button
     if st.button("Predict"):
-        input_features_arr = np.array([input_features[column] for column in df_scaled.columns])
-        
-        # Make predictions using the Linear Regression model
-        predicted_ground_water_availability = lr_model.predict(input_features_arr.reshape(1, -1))
+        input_features = np.array([
+            recharge_rainfall_monsoon,
+            recharge_other_sources_monsoon,
+            recharge_rainfall_non_monsoon,
+            recharge_other_sources_non_monsoon,
+            total_annual_ground_water_recharge,
+            total_natural_discharges,
+            annual_extractable_ground_water_resource,
+            current_annual_ground_water_extraction_irrigation,
+            current_annual_ground_water_extraction_domestic_industrial,
+            total_current_annual_ground_water_extraction,
+            annual_gw_allocation_domestic_2025,
+            stage_of_ground_water_extraction
+        ])
+
+        # Make predictions using the loaded Linear Regression model
+        predicted_ground_water_availability = lr_model.predict(input_features.reshape(1, -1))
 
         # Display the predicted Ground Water Availability
         st.subheader("Predicted Ground Water Availability:")
