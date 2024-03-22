@@ -35,65 +35,58 @@ st.title("Ground Water Detection: Predicting Ground Water Availability")
 
 # Define the Streamlit app
 def main():
-    
-    
     # Login
     username = st.sidebar.text_input("Username")
     password = st.sidebar.text_input("Password", type="password")
     
     if username == "admin" and password == "admin123":
         st.success("Logged in as Admin")
-    elif username != "" and password != "":
+        
+        # Add user input fields
+        st.subheader("Enter Feature Values:")
+        recharge_rainfall_monsoon = st.slider("Recharge from rainfall During Monsoon Season", min_value=-10.0, max_value=10.0, step=0.1)
+        recharge_other_sources_monsoon = st.slider("Recharge from other sources During Monsoon Season", min_value=-10.0, max_value=10.0, step=0.1)
+        recharge_rainfall_non_monsoon = st.slider("Recharge from rainfall During Non Monsoon Season", min_value=-10.0, max_value=10.0, step=0.1)
+        recharge_other_sources_non_monsoon = st.slider("Recharge from other sources During Non Monsoon Season", min_value=-10.0, max_value=10.0, step=0.1)
+        total_annual_ground_water_recharge = st.slider("Total Annual Ground Water Recharge", min_value=-10.0, max_value=10.0, step=0.1)
+        total_natural_discharges = st.slider("Total Natural Discharges", min_value=-10.0, max_value=10.0, step=0.1)
+        annual_extractable_ground_water_resource = st.slider("Annual Extractable Ground Water Resource", min_value=-10.0, max_value=10.0, step=0.1)
+        current_annual_ground_water_extraction_irrigation = st.slider("Current Annual Ground Water Extraction For Irrigation", min_value=-10.0, max_value=10.0, step=0.1)
+        current_annual_ground_water_extraction_domestic_industrial = st.slider("Current Annual Ground Water Extraction For Domestic & Industrial Use", min_value=-10.0, max_value=10.0, step=0.1)
+        total_current_annual_ground_water_extraction = st.slider("Total Current Annual Ground Water Extraction", min_value=-10.0, max_value=10.0, step=0.1)
+        annual_gw_allocation_domestic_2025 = st.slider("Annual GW Allocation for Domestic Use as on 2025", min_value=-10.0, max_value=10.0, step=0.1)
+        stage_of_ground_water_extraction = st.slider("Stage of Ground Water Extraction (%)", min_value=-10.0, max_value=10.0, step=0.1)
+        
+        # Predict button
+        if st.button("Predict"):
+            # Prepare input features
+            input_features = np.array([
+                recharge_rainfall_monsoon,
+                recharge_other_sources_monsoon,
+                recharge_rainfall_non_monsoon,
+                recharge_other_sources_non_monsoon,
+                total_annual_ground_water_recharge,
+                total_natural_discharges,
+                annual_extractable_ground_water_resource,
+                current_annual_ground_water_extraction_irrigation,
+                current_annual_ground_water_extraction_domestic_industrial,
+                total_current_annual_ground_water_extraction,
+                annual_gw_allocation_domestic_2025,
+                stage_of_ground_water_extraction
+            ]).reshape(1, -1)
+            
+            # Make prediction
+            predicted_ground_water_availability = linear_reg.predict(input_features)
+            
+            # Display prediction
+            st.subheader("Predicted Ground Water Availability:")
+            st.write(predicted_ground_water_availability[0])
+    
+        # Logout button
+        if st.sidebar.button("Logout"):
+            st.warning("Logged out")
+    elif username != "" or password != "":
         st.error("Invalid Username or Password")
-
-
-     
-    
-    # Add user input fields
-    st.subheader("Enter Feature Values:")
-    recharge_rainfall_monsoon = st.slider("Recharge from rainfall During Monsoon Season", min_value=-10.0, max_value=10.0, step=0.1)
-    recharge_other_sources_monsoon = st.slider("Recharge from other sources During Monsoon Season", min_value=-10.0, max_value=10.0, step=0.1)
-    recharge_rainfall_non_monsoon = st.slider("Recharge from rainfall During Non Monsoon Season", min_value=-10.0, max_value=10.0, step=0.1)
-    recharge_other_sources_non_monsoon = st.slider("Recharge from other sources During Non Monsoon Season", min_value=-10.0, max_value=10.0, step=0.1)
-    total_annual_ground_water_recharge = st.slider("Total Annual Ground Water Recharge", min_value=-10.0, max_value=10.0, step=0.1)
-    total_natural_discharges = st.slider("Total Natural Discharges", min_value=-10.0, max_value=10.0, step=0.1)
-    annual_extractable_ground_water_resource = st.slider("Annual Extractable Ground Water Resource", min_value=-10.0, max_value=10.0, step=0.1)
-    current_annual_ground_water_extraction_irrigation = st.slider("Current Annual Ground Water Extraction For Irrigation", min_value=-10.0, max_value=10.0, step=0.1)
-    current_annual_ground_water_extraction_domestic_industrial = st.slider("Current Annual Ground Water Extraction For Domestic & Industrial Use", min_value=-10.0, max_value=10.0, step=0.1)
-    total_current_annual_ground_water_extraction = st.slider("Total Current Annual Ground Water Extraction", min_value=-10.0, max_value=10.0, step=0.1)
-    annual_gw_allocation_domestic_2025 = st.slider("Annual GW Allocation for Domestic Use as on 2025", min_value=-10.0, max_value=10.0, step=0.1)
-    stage_of_ground_water_extraction = st.slider("Stage of Ground Water Extraction (%)", min_value=-10.0, max_value=10.0, step=0.1)
-    
-    # Predict button
-    if st.button("Predict"):
-        # Prepare input features
-        input_features = np.array([
-            recharge_rainfall_monsoon,
-            recharge_other_sources_monsoon,
-            recharge_rainfall_non_monsoon,
-            recharge_other_sources_non_monsoon,
-            total_annual_ground_water_recharge,
-            total_natural_discharges,
-            annual_extractable_ground_water_resource,
-            current_annual_ground_water_extraction_irrigation,
-            current_annual_ground_water_extraction_domestic_industrial,
-            total_current_annual_ground_water_extraction,
-            annual_gw_allocation_domestic_2025,
-            stage_of_ground_water_extraction
-        ]).reshape(1, -1)
-        
-        # Make prediction
-        predicted_ground_water_availability = linear_reg.predict(input_features)
-        
-        # Display prediction
-        st.subheader("Predicted Ground Water Availability:")
-        st.write(predicted_ground_water_availability[0])
-    
-   
-    
-    # Logout button
-    if st.sidebar.button("Logout"):
-        st.warning("Logged out")
 
 if __name__ == "__main__":
     main()
