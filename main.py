@@ -4,6 +4,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 import streamlit as st
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # Load the dataset
 df = pd.read_csv('Dynamic_2017.csv')
@@ -29,9 +31,38 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 linear_reg = LinearRegression()
 linear_reg.fit(X_train, y_train)
 
+st.title("Ground Water Detection: Predicting Ground Water Availability")
+
 # Define the Streamlit app
 def main():
-    st.title("Ground Water Detection: Predicting Ground Water Availability")
+    
+    
+    # Login
+    username = st.sidebar.text_input("Username")
+    password = st.sidebar.text_input("Password", type="password")
+    
+    if username == "admin" and password == "admin123":
+        st.success("Logged in as Admin")
+    elif username != "" and password != "":
+        st.error("Invalid Username or Password")
+
+
+     # Visualization 1: Barplot of Ground Water Recharge and Extraction by State
+    st.subheader("Visualization 1: Ground Water Recharge and Extraction by State")
+    f, ax = plt.subplots(figsize=(10, 9))
+    sns.set_color_codes("muted")
+    sns.barplot(x='GW_Recharge', y='State', data=df, label='Available Ground Water', color='b')
+    sns.barplot(x='GW_Extraction', y='State', data=df, label='GroundWater Extraction', color='r')
+    ax.legend(ncol=2, loc="lower right", frameon=True)
+    st.pyplot(f)
+    
+    # Visualization 2: Barplot of Future Ground Water Availability by State
+    st.subheader("Visualization 2: Future Ground Water Availability by State")
+    dfnew = df.copy()
+    dfnew.sort_values('Future_GW_Available', inplace=True)
+    f, ax = plt.subplots(figsize=(10, 9))
+    sns.barplot(x='Future_GW_Available', y='State', data=dfnew)
+    st.pyplot(f)
     
     # Add user input fields
     st.subheader("Enter Feature Values:")
@@ -72,6 +103,12 @@ def main():
         # Display prediction
         st.subheader("Predicted Ground Water Availability:")
         st.write(predicted_ground_water_availability[0])
+    
+   
+    
+    # Logout button
+    if st.sidebar.button("Logout"):
+        st.warning("Logged out")
 
 if __name__ == "__main__":
     main()
