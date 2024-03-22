@@ -6,7 +6,8 @@ import numpy as np
 import pickle
 
 # Load the Linear Regression Model with joblib
-lr_model = pickle.load('models/linear_reg_model.pkl')
+with open('models/linear_reg_model.pkl', 'rb') as f:
+    lr_model = pickle.load(f)
 
 # Load the dataset
 dataset_path = 'Dynamic_2017.csv'
