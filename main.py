@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 import streamlit as st
 
 # Load the dataset
-df = pd.read_csv('Dynamic_2017_2_0.csv')
+df = pd.read_csv('Dynamic_2017.csv')
 
 # Drop unnecessary columns
 df.drop(['S.no.', 'Name of State', 'Name of District'], axis=1, inplace=True)
