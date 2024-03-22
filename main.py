@@ -3,7 +3,7 @@ import numpy as np
 import joblib
 
 # Load the trained Linear Regression model
-lr_model = joblib.load('models/linear_regression_model.pkl')
+lr_model = joblib.load('linear_regression_model.pkl')
 
 def main():
     st.title("Ground Water Detection: Predicting Ground Water Availability")
